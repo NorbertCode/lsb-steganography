@@ -19,30 +19,35 @@
 
 BMPImage::BMPImage(std::vector<uint8_t> &data)
 {
-    image_data = data;
+    file_data = data;
 
+    uint16_t color_depth;
     uint32_t compression;
 
-    std::memcpy(&color_depth, image_data.data() + COLOR_DEPTH_OFFSET, COLOR_DEPTH_SIZE);
-    std::memcpy(&compression, image_data.data() + COMPRESSION_OFFSET, COMPRESSION_SIZE);
+    std::memcpy(&color_depth, file_data.data() + COLOR_DEPTH_OFFSET, COLOR_DEPTH_SIZE);
+    std::memcpy(&compression, file_data.data() + COMPRESSION_OFFSET, COMPRESSION_SIZE);
 
     if (compression != 0x0 || !(color_depth == 24 || color_depth == 32))
     {
         throw std::invalid_argument("Only uncompressed, 24 or 32 bit bmps are allowed.");
     }
 
-    std::memcpy(&pixel_array_offset, image_data.data() + PIXEL_ARRAY_OFFSET_ADDR, PIXEL_ARRAY_OFFSET_SIZE);
+    channels = color_depth / 8;
 
-    std::memcpy(&width, image_data.data() + WIDTH_OFFSET, WIDTH_SIZE);
-    std::memcpy(&height, image_data.data() + HEIGHT_OFFSET, HEIGHT_SIZE);
+    std::memcpy(&pixel_array_offset, file_data.data() + PIXEL_ARRAY_OFFSET_ADDR, PIXEL_ARRAY_OFFSET_SIZE);
+
+    std::memcpy(&width, file_data.data() + WIDTH_OFFSET, WIDTH_SIZE);
+    std::memcpy(&height, file_data.data() + HEIGHT_OFFSET, HEIGHT_SIZE);
 }
 
-uint8_t BMPImage::getPixelDataAtIndex(const unsigned int index) const
+uint8_t BMPImage::getPixelData(const unsigned int pixel_index, const unsigned int channel) const
 {
-    return image_data[pixel_array_offset + index];
+    const unsigned int index = pixel_array_offset + (pixel_index * channels) + channel;
+    return file_data[index];
 }
 
-void BMPImage::setPixelDataAtIndex(const unsigned int index, const uint8_t data)
+void BMPImage::setPixelData(const unsigned int pixel_index, const unsigned int channel, const uint8_t data)
 {
-    image_data[pixel_array_offset + index] = data;
+    const unsigned int index = pixel_array_offset + (pixel_index * channels) + channel;
+    file_data[index] = data;
 }

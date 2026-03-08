@@ -14,16 +14,18 @@ public:
 
     virtual ~Image() = default;
 
-    int getWidth() const;
-    int getHeight() const;
+    unsigned int getWidth() const;
+    unsigned int getHeight() const;
+    unsigned int getChannels() const;
     Type getImageType() const;
     std::vector<uint8_t> getFileData() const;
 
-    virtual uint8_t getPixelDataAtIndex(const unsigned int index) const = 0;
-    virtual void setPixelDataAtIndex(const unsigned int index, const uint8_t data) = 0;
+    virtual uint8_t getPixelData(const unsigned int pixel_index, const unsigned int channel) const = 0;
+    virtual void setPixelData(const unsigned int pixel_index, const unsigned int channel, const uint8_t data) = 0;
 
 protected:
-    int width, height;
+    unsigned int width, height;
+    unsigned int channels;
     Type image_type;
-    std::vector<uint8_t> image_data;
+    std::vector<uint8_t> file_data;
 };

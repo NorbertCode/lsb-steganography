@@ -1,13 +1,18 @@
 #include "image.h"
 
-int Image::getWidth() const
+unsigned int Image::getWidth() const
 {
     return width;
 }
 
-int Image::getHeight() const
+unsigned int Image::getHeight() const
 {
     return height;
+}
+
+unsigned int Image::getChannels() const
+{
+    return channels;
 }
 
 Image::Type Image::getImageType() const
@@ -17,5 +22,5 @@ Image::Type Image::getImageType() const
 
 std::vector<uint8_t> Image::getFileData() const
 {
-    return image_data;
+    return file_data;
 }
