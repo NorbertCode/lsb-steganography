@@ -9,6 +9,7 @@ add_library(
     src/images/image.cpp
     src/images/types/bmpImage.cpp
     src/images/imageLoader.cpp
+    src/steganography/steganographer.cpp
 )
 target_include_directories(core_lib PUBLIC src)
 
