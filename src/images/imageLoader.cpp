@@ -16,7 +16,7 @@ std::unique_ptr<Image> ImageLoader::openImage(const std::string &file_path) cons
         break;
     
     default:
-        // TODO: Error handling
+        throw UnsupportedFormatException();
         break;
     }
 
@@ -27,7 +27,8 @@ void ImageLoader::saveImage(const std::unique_ptr<Image> image, const std::strin
 {
     std::ofstream file(file_path, std::ios::binary);
 
-    // TODO: Error handling
+    if (!file.is_open())
+        throw InvalidFileException(file_path);
 
     file.write(reinterpret_cast<char*>(image->getFileData().data()), image->getFileData().size());
 
@@ -38,7 +39,8 @@ std::vector<uint8_t> ImageLoader::readData(const std::string &file_path) const
 {
     std::ifstream file(file_path, std::ios::binary | std::ios::ate);
 
-    // TODO: Error handling
+    if (!file.is_open())
+        throw InvalidFileException(file_path);
 
     auto file_size = file.tellg();
     file.seekg(0, std::ios::beg);

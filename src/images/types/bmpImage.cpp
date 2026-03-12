@@ -28,9 +28,7 @@ BMPImage::BMPImage(std::vector<uint8_t> data)
     std::memcpy(&compression, file_data.data() + COMPRESSION_OFFSET, COMPRESSION_SIZE);
 
     if (compression != 0x0 || !(color_depth == 24 || color_depth == 32))
-    {
-        throw std::invalid_argument("Only uncompressed, 24 or 32 bit bmps are allowed.");
-    }
+        throw InvalidBmpException();
 
     channels = color_depth / 8;
 

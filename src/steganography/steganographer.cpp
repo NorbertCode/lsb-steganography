@@ -15,12 +15,10 @@ void Steganographer::setImage(std::unique_ptr<Image> image)
 std::string Steganographer::readMessage(const unsigned int length_bytes) const
 {
     if (image == nullptr)
-    {
-        // TODO: Error handling
-        return "";
-    }
+        throw NullImageException();
 
-    // TODO: Handling length > actual length
+    if (length_bytes > image->getSize())
+        throw InvalidMessageLength(length_bytes, image->getSize());
 
     std::vector<uint8_t> message_bytes(length_bytes, 0);
 
@@ -40,12 +38,10 @@ std::string Steganographer::readMessage(const unsigned int length_bytes) const
 void Steganographer::writeMessage(const std::string &message)
 {
     if (image == nullptr)
-    {
-        // TODO: Error handling
-        return;
-    }
+        throw NullImageException();
 
-    // TODO: Handling message length > actual length
+    if (message.size() > image->getSize())
+        throw InvalidMessageLength(message.size(), image->getSize());
 
     std::vector<uint8_t> message_bytes(message.begin(), message.end());
 

@@ -13,3 +13,9 @@ public:
 private:
     uint32_t pixel_array_offset;
 };
+
+class InvalidBmpException : public std::runtime_error
+{
+public:
+    InvalidBmpException() : std::runtime_error("Only uncompressed, 24 or 32 bit bmps are allowed.") { }
+};
