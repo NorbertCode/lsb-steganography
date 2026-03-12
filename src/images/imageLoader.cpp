@@ -3,7 +3,7 @@
 #include <fstream>
 #include <algorithm>
 
-std::unique_ptr<Image> ImageLoader::openImage(const std::string &file_path)
+std::unique_ptr<Image> ImageLoader::openImage(const std::string &file_path) const
 {
     std::vector<uint8_t> data = readData(file_path);
 
@@ -12,17 +12,29 @@ std::unique_ptr<Image> ImageLoader::openImage(const std::string &file_path)
     switch (getImageTypeFromData(data))
     {
     case Image::Type::BMP:
-        image = std::make_unique<BMPImage>(data);
+        image = std::make_unique<BMPImage>(std::move(data));
         break;
     
     default:
+        // TODO: Error handling
         break;
     }
 
     return image;
 }
 
-std::vector<uint8_t> ImageLoader::readData(const std::string &file_path)
+void ImageLoader::saveImage(const std::unique_ptr<Image> image, const std::string &file_path) const
+{
+    std::ofstream file(file_path, std::ios::binary);
+
+    // TODO: Error handling
+
+    file.write(reinterpret_cast<char*>(image->getFileData().data()), image->getFileData().size());
+
+    file.close();
+}
+
+std::vector<uint8_t> ImageLoader::readData(const std::string &file_path) const
 {
     std::ifstream file(file_path, std::ios::binary | std::ios::ate);
 
@@ -34,6 +46,8 @@ std::vector<uint8_t> ImageLoader::readData(const std::string &file_path)
     std::vector<uint8_t> file_data(file_size);
 
     file.read(reinterpret_cast<char*>(file_data.data()), file_size);
+
+    file.close();
 
     return file_data;
 }
