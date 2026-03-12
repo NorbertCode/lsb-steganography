@@ -17,9 +17,9 @@
 #define HEIGHT_OFFSET  22
 #define HEIGHT_SIZE    4
 
-BMPImage::BMPImage(std::vector<uint8_t> &data)
+BMPImage::BMPImage(std::vector<uint8_t> data)
 {
-    file_data = data;
+    file_data = std::move(data);
 
     uint16_t color_depth;
     uint32_t compression;
@@ -40,14 +40,12 @@ BMPImage::BMPImage(std::vector<uint8_t> &data)
     std::memcpy(&height, file_data.data() + HEIGHT_OFFSET, HEIGHT_SIZE);
 }
 
-uint8_t BMPImage::getPixelData(const unsigned int pixel_index, const unsigned int channel) const
+uint8_t BMPImage::getPixelData(const unsigned int index) const
 {
-    const unsigned int index = pixel_array_offset + (pixel_index * channels) + channel;
-    return file_data[index];
+    return file_data[pixel_array_offset + index];
 }
 
-void BMPImage::setPixelData(const unsigned int pixel_index, const unsigned int channel, const uint8_t data)
+void BMPImage::setPixelData(const unsigned int index, const uint8_t data)
 {
-    const unsigned int index = pixel_array_offset + (pixel_index * channels) + channel;
-    file_data[index] = data;
+    file_data[pixel_array_offset + index] = data;
 }

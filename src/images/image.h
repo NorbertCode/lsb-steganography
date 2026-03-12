@@ -17,11 +17,12 @@ public:
     unsigned int getWidth() const;
     unsigned int getHeight() const;
     unsigned int getChannels() const;
+    unsigned int getSize() const;
     Type getImageType() const;
     std::vector<uint8_t> getFileData() const;
 
-    virtual uint8_t getPixelData(const unsigned int pixel_index, const unsigned int channel) const = 0;
-    virtual void setPixelData(const unsigned int pixel_index, const unsigned int channel, const uint8_t data) = 0;
+    virtual uint8_t getPixelData(const unsigned int index) const = 0;
+    virtual void setPixelData(const unsigned int index, const uint8_t data) = 0;
 
 protected:
     unsigned int width, height;
