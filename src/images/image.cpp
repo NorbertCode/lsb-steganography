@@ -15,7 +15,7 @@ unsigned int Image::getChannels() const
     return channels;
 }
 
-unsigned int Image::getSize() const
+size_t Image::getSize() const
 {
     return file_data.size();
 }
