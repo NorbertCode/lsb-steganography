@@ -12,50 +12,50 @@ void Steganographer::setImage(std::unique_ptr<Image> image)
     this->image = std::move(image);
 }
 
-std::string Steganographer::readMessage(const unsigned int length_bytes) const
+std::vector<uint8_t> Steganographer::read(const size_t start_index, const size_t length_bytes) const
 {
     if (image == nullptr)
         throw NullImageException();
 
     if (length_bytes > image->getSize())
-        throw InvalidMessageLength(length_bytes, image->getSize());
+        throw InvalidMessageLength(length_bytes, image->getSize(), start_index);
 
     std::vector<uint8_t> message_bytes(length_bytes, 0);
 
-    for (unsigned int i = 0; i < length_bytes * 8; i++)
+    for (size_t i = start_index; i < start_index + (length_bytes * 8); i++)
     {
         const uint8_t byte = image->getPixelData(i);
         const uint8_t lsb = byte & 0x1;
 
-        const unsigned int byte_index = i / 8;
+        const size_t byte_index = (i - start_index) / 8;
         message_bytes[byte_index] <<= 1;
         message_bytes[byte_index] |= lsb;
     }
 
-    return std::string(message_bytes.begin(), message_bytes.end());
+    return message_bytes;
 }
 
-void Steganographer::writeMessage(const std::string &message)
+void Steganographer::write(const size_t start_index, const std::span<uint8_t> &data)
 {
     if (image == nullptr)
         throw NullImageException();
 
-    if (message.size() > image->getSize())
-        throw InvalidMessageLength(message.size(), image->getSize());
+    if (data.size() > image->getSize())
+        throw InvalidMessageLength(data.size(), image->getSize(), start_index);
 
-    std::vector<uint8_t> message_bytes(message.begin(), message.end());
+    std::vector<uint8_t> data_copy(data.begin(), data.end());
 
-    for (unsigned int i = 0; i < message_bytes.size() * 8; i++)
+    for (size_t i = start_index; i < data.size() * 8; i++)
     {
-        const unsigned int byte_index = i / 8;
+        const size_t byte_index = i / 8;
 
-        const uint8_t message_msb = (message_bytes[byte_index] & 0b10000000) >> 7;
-        message_bytes[byte_index] <<= 0x1;
+        const uint8_t data_msb = (data_copy[byte_index] & 0b10000000) >> 7;
+        data_copy[byte_index] <<= 0x1;
 
         // Change pixel lsb to message msb
         uint8_t pixel_byte = image->getPixelData(i);
         pixel_byte &= 0b11111110; 
-        pixel_byte |= message_msb;
+        pixel_byte |= data_msb;
 
         image->setPixelData(i, pixel_byte);
     }
