@@ -20,6 +20,7 @@
 BMPImage::BMPImage(std::vector<uint8_t> data)
 {
     file_data = std::move(data);
+    image_type = Image::Type::BMP;
 
     uint16_t color_depth;
     uint32_t compression;
