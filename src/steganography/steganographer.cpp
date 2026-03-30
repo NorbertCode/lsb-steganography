@@ -17,8 +17,8 @@ std::vector<uint8_t> Steganographer::read(const size_t start_index, const size_t
     if (image == nullptr)
         throw NullImageException();
 
-    if (length_bytes > image->getSize())
-        throw InvalidMessageLength(length_bytes, image->getSize(), start_index);
+    if (start_index + length_bytes > image->getPixelDataSize())
+        throw InvalidMessageLength(length_bytes, image->getPixelDataSize(), start_index);
 
     std::vector<uint8_t> message_bytes(length_bytes, 0);
 
@@ -40,8 +40,8 @@ void Steganographer::write(const size_t start_index, const std::span<uint8_t> &d
     if (image == nullptr)
         throw NullImageException();
 
-    if (data.size() > image->getSize())
-        throw InvalidMessageLength(data.size(), image->getSize(), start_index);
+    if (start_index + (data.size() * 8) > image->getPixelDataSize())
+        throw InvalidMessageLength(data.size(), image->getPixelDataSize(), start_index);
 
     std::vector<uint8_t> data_copy(data.begin(), data.end());
 
