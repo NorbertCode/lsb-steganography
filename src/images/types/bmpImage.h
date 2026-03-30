@@ -7,6 +7,7 @@ public:
     BMPImage(std::vector<uint8_t> data);
     virtual ~BMPImage() = default;
 
+    virtual size_t getPixelDataSize() const override;
     virtual uint8_t getPixelData(const size_t index) const override;
     virtual void setPixelData(const size_t index, const uint8_t data) override;
 

@@ -39,6 +39,11 @@ BMPImage::BMPImage(std::vector<uint8_t> data)
     std::memcpy(&height, file_data.data() + HEIGHT_OFFSET, HEIGHT_SIZE);
 }
 
+size_t BMPImage::getPixelDataSize() const
+{
+    return getSize() - pixel_array_offset;
+}
+
 uint8_t BMPImage::getPixelData(const size_t index) const
 {
     return file_data[pixel_array_offset + index];

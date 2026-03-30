@@ -21,6 +21,7 @@ public:
     Type getImageType() const;
     std::vector<uint8_t> getFileData() const;
 
+    virtual size_t getPixelDataSize() const = 0;
     virtual uint8_t getPixelData(const size_t index) const = 0;
     virtual void setPixelData(const size_t index, const uint8_t data) = 0;
 
