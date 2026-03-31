@@ -22,14 +22,18 @@ std::vector<uint8_t> Steganographer::read(const size_t start_index, const size_t
 
     std::vector<uint8_t> message_bytes(length_bytes, 0);
 
-    for (size_t i = start_index; i < start_index + (length_bytes * 8); i++)
+    for (size_t byte_index = 0; byte_index < length_bytes; byte_index++)
     {
-        const uint8_t byte = image->getPixelData(i);
-        const uint8_t lsb = byte & 0x1;
+        size_t byte = start_index + (byte_index * 8);
+        uint8_t value = 0;
 
-        const size_t byte_index = (i - start_index) / 8;
-        message_bytes[byte_index] <<= 1;
-        message_bytes[byte_index] |= lsb;
+        for (size_t bit_index = 0; bit_index < 8; bit_index++)
+        {
+            const uint8_t pixel_data_byte = image->getPixelData(start_index + (byte_index * 8) + bit_index);
+            value |= (pixel_data_byte & 0x1) << (7 - bit_index); // Get only LSb shifted to proper bit
+        }
+
+        message_bytes[byte_index] = value;
     }
 
     return message_bytes;
@@ -43,20 +47,19 @@ void Steganographer::write(const size_t start_index, const std::span<uint8_t> &d
     if (start_index + (data.size() * 8) > image->getPixelDataSize())
         throw InvalidMessageLength(data.size(), image->getPixelDataSize(), start_index);
 
-    std::vector<uint8_t> data_copy(data.begin(), data.end());
-
-    for (size_t i = start_index; i < data.size() * 8; i++)
+    for (size_t data_byte_index = 0; data_byte_index < data.size(); data_byte_index++)
     {
-        const size_t byte_index = i / 8;
+        size_t image_byte_index_base = start_index + (data_byte_index * 8);
 
-        const uint8_t data_msb = (data_copy[byte_index] & 0b10000000) >> 7;
-        data_copy[byte_index] <<= 0x1;
+        for (size_t data_bit_index = 0; data_bit_index < 8; data_bit_index++)
+        {
+            const size_t image_byte_index = image_byte_index_base + data_bit_index;
+            uint8_t image_byte = image->getPixelData(image_byte_index);
 
-        // Change pixel lsb to message msb
-        uint8_t pixel_byte = image->getPixelData(i);
-        pixel_byte &= 0b11111110; 
-        pixel_byte |= data_msb;
+            uint8_t bit = (data[data_byte_index] >> (7 - data_bit_index)) & 0x1;
+            image_byte = (image_byte & ~1) | bit;
 
-        image->setPixelData(i, pixel_byte);
+            image->setPixelData(image_byte_index, image_byte);
+        }
     }
 }
