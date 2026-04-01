@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.24)
 project(lsb_steganography)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -33,6 +33,7 @@ enable_testing()
 add_executable(
     run_tests
     tests/sharedTestData.h
+    tests/images/imageLoaderTest.cpp
     tests/images/types/bmpImageTest.cpp
     tests/steganography/steganographerTest.cpp
 )
