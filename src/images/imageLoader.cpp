@@ -23,16 +23,9 @@ std::unique_ptr<Image> ImageLoader::openImage(const std::string &file_path) cons
     return image;
 }
 
-void ImageLoader::saveImage(const std::unique_ptr<Image> image, const std::string &file_path) const
+void ImageLoader::saveImage(const std::unique_ptr<Image> &image, const std::string &file_path) const
 {
-    std::ofstream file(file_path, std::ios::binary);
-
-    if (!file.is_open())
-        throw InvalidFileException(file_path);
-
-    file.write(reinterpret_cast<char*>(image->getFileData().data()), image->getFileData().size());
-
-    file.close();
+    writeData(image->getFileData(), file_path);
 }
 
 std::vector<uint8_t> ImageLoader::readData(const std::string &file_path) const
@@ -52,6 +45,18 @@ std::vector<uint8_t> ImageLoader::readData(const std::string &file_path) const
     file.close();
 
     return file_data;
+}
+
+void ImageLoader::writeData(const std::vector<uint8_t> &data, const std::string &file_path) const
+{
+    std::ofstream file(file_path, std::ios::binary);
+
+    if (!file.is_open())
+        throw InvalidFileException(file_path);
+
+    file.write(reinterpret_cast<const char*>(data.data()), data.size());
+
+    file.close();
 }
 
 Image::Type ImageLoader::getImageTypeFromData(const std::vector<uint8_t> &data) const
