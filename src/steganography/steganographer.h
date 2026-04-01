@@ -14,24 +14,27 @@ public:
     std::vector<uint8_t> read(const size_t start_index, const size_t length_bytes) const;
     void write(const size_t start_index, const std::span<uint8_t> &data);
 
-    template <typename T> requires std::is_trivially_copyable_v<T>
+    template <typename T> requires std::is_integral_v<T>
     T read(const size_t start_index) const
     {
         std::vector<uint8_t> bytes = read(start_index, sizeof(T));
+        T output = 0;
 
-        T output;
-        std::memcpy(&output, bytes.data(), sizeof(T));
+        for (int i = 0; i < sizeof(T); i++)
+            output = (output << 8) | bytes[i];
 
         return output;
     }
 
-    template <typename T> requires std::is_trivially_copyable_v<T>
+    template <typename T> requires std::is_integral_v<T>
     void write(const size_t start_index, const T &data)
     {
-        const uint8_t* begin = reinterpret_cast<uint8_t*>(&data);
-        std::span<uint8_t> binary_data(begin, sizeof(T));
+        std::vector<uint8_t> bytes(sizeof(T), 0);
 
-        write(start_index, binary_data);
+        for (int i = 0; i < sizeof(T); i++)
+            bytes[i] = data >> (8 * (sizeof(T) - i - 1)) & 0xFF;
+        
+        write(start_index, bytes);
     }
 
 private:
