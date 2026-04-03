@@ -55,7 +55,7 @@ TEST(ImageLoaderTest, SaveImage_Valid_WritesCorrectly)
     loader.setFakeData(valid_1x1_3channel_bmp);
 
     std::unique_ptr<Image> image = loader.openImage("");
-    loader.saveImage(image, "");
+    loader.saveImage(*image, "");
 
     EXPECT_EQ(loader.getWrittenData(), valid_1x1_3channel_bmp);
 }

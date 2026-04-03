@@ -7,7 +7,7 @@ class ImageLoader
 {
 public:
     std::unique_ptr<Image> openImage(const std::string &file_path) const;
-    void saveImage(const std::unique_ptr<Image> &image, const std::string &file_path) const;
+    void saveImage(const Image &image, const std::string &file_path) const;
 
 protected:
     virtual std::vector<uint8_t> readData(const std::string &file_path) const;

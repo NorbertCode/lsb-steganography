@@ -23,9 +23,9 @@ std::unique_ptr<Image> ImageLoader::openImage(const std::string &file_path) cons
     return image;
 }
 
-void ImageLoader::saveImage(const std::unique_ptr<Image> &image, const std::string &file_path) const
+void ImageLoader::saveImage(const Image &image, const std::string &file_path) const
 {
-    writeData(image->getFileData(), file_path);
+    writeData(image.getFileData(), file_path);
 }
 
 std::vector<uint8_t> ImageLoader::readData(const std::string &file_path) const
