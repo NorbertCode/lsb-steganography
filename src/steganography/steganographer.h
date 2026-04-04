@@ -8,11 +8,11 @@
 class Steganographer
 {
 public:
-    std::vector<uint8_t> read(Image &image, const size_t start_index, const size_t length_bytes) const;
-    void write(Image &image, const size_t start_index, const std::span<uint8_t> &data);
+    std::vector<uint8_t> read(const Image &image, const size_t start_index, const size_t length_bytes) const;
+    void write(Image &image, const size_t start_index, const std::vector<uint8_t> &data);
 
     template <typename T> requires std::is_integral_v<T>
-    T read(Image &image, const size_t start_index) const
+    T read(const Image &image, const size_t start_index) const
     {
         std::vector<uint8_t> bytes = read(image, start_index, sizeof(T));
         T output = 0;

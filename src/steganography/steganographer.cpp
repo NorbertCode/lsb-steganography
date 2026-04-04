@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-std::vector<uint8_t> Steganographer::read(Image &image, const size_t start_index, const size_t length_bytes) const
+std::vector<uint8_t> Steganographer::read(const Image &image, const size_t start_index, const size_t length_bytes) const
 {
     if (start_index + length_bytes > image.getPixelDataSize())
         throw InvalidMessageLength(length_bytes, image.getPixelDataSize(), start_index);
@@ -26,7 +26,7 @@ std::vector<uint8_t> Steganographer::read(Image &image, const size_t start_index
     return message_bytes;
 }
 
-void Steganographer::write(Image &image, const size_t start_index, const std::span<uint8_t> &data)
+void Steganographer::write(Image &image, const size_t start_index, const std::vector<uint8_t> &data)
 {
     if (start_index + (data.size() * 8) > image.getPixelDataSize())
         throw InvalidMessageLength(data.size(), image.getPixelDataSize(), start_index);
