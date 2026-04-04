@@ -21,10 +21,11 @@ std::string Messenger::readMessage(const Image &image, const size_t message_inde
     std::string message;
     message.reserve(message_length);
 
-    while (offset_pointer < offset_pointer + (message_length * 8))
+    const size_t end = offset_pointer + (message_length * 8);
+    while (offset_pointer < end)
     {
         message += steganographer.read<char>(image, offset_pointer);
-        offset_pointer++;
+        offset_pointer += 8;
     }
 
     return message;
@@ -51,17 +52,15 @@ void Messenger::writeMessage(Image &image, const std::string &message)
 
     steganographer.write<uint32_t>(image, getMessageAmountOffset(), message_amount + 1); // Increment message amount
 
-    size_t offset_pointer = getMessagesEndPointer(image);
-
     // Write message length
-    steganographer.write<uint32_t>(image, offset_pointer, message.size());
-    offset_pointer += message.size() * 8;
+    steganographer.write<uint32_t>(image, end_pointer, message.size());
+    end_pointer += sizeof(uint32_t) * 8;
 
     // Write message content
     for (int i = 0; i < message.size(); i++)
     {
-        steganographer.write<char>(image, offset_pointer, message[i]);
-        offset_pointer += sizeof(char) * 8;
+        steganographer.write<char>(image, end_pointer, message[i]);
+        end_pointer += sizeof(char) * 8;
     }
 }
 
