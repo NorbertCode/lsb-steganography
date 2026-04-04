@@ -15,8 +15,12 @@ add_library(
 target_include_directories(core_lib PUBLIC src)
 
 # Executable
-add_executable(steg src/main.cpp)
+add_executable(steg 
+    src/main.cpp
+    src/cli/argParser.cpp
+)
 target_link_libraries(steg PRIVATE core_lib)
+target_include_directories(steg PRIVATE include)
 
 # GoogleTest
 include(FetchContent)

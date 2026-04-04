@@ -1,8 +1,9 @@
 #include <iostream>
+#include "cli/argParser.h"
 
-int main()
+int main(int argc, char** argv)
 {
-    std::cout << "Hello World" << std::endl;
+    parseArguments(argc, argv);
 
     return 0;
 }
