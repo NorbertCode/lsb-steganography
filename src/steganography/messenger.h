@@ -4,6 +4,7 @@
 class Messenger
 {
 public:
+    Messenger();
     Messenger(Steganographer &steganographer) : steganographer(steganographer) { }
 
     std::string readMessage(const Image &image, const size_t message_index = 0) const;
@@ -35,4 +36,16 @@ public:
           index(index) { }
 
     const size_t getIndex() const { return index; }
+};
+
+class MessageWontFit : public std::logic_error
+{
+    const size_t available_bits;
+
+public:
+    MessageWontFit(const size_t available_bits)
+        : std::logic_error("Image cannot fit message. Only " + std::to_string(available_bits) + " bits available to store in image."),
+          available_bits(available_bits) { }
+
+    const size_t getAvailableBits() const { return available_bits; }
 };

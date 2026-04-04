@@ -45,6 +45,16 @@ std::vector<std::string> Messenger::readAllMessages(const Image &image) const
 
 void Messenger::writeMessage(Image &image, const std::string &message)
 {
+    // Check if header will fit
+    if (getMessageArrayOffset() > image.getPixelDataSize())
+        throw MessageWontFit(image.getPixelDataSize());
+    
+    // Check if message will fit
+    size_t end_pointer = getMessagesEndPointer(image);
+    if (end_pointer + (sizeof(uint32_t) + message.size()) * 8 > image.getPixelDataSize())
+        throw MessageWontFit(image.getPixelDataSize());
+
+    // Header parsing and updating
     const uint32_t message_amount = getMessageAmount(image);
 
     if (message_amount == 0)
