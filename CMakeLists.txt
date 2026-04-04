@@ -9,13 +9,14 @@ add_library(
     src/images/image.cpp
     src/images/types/bmpImage.cpp
     src/images/imageLoader.cpp
-    src/steganography/steganographer.cpp
+    src/steganography/steganographer.cpp 
+    src/steganography/messenger.cpp
 )
 target_include_directories(core_lib PUBLIC src)
 
 # Executable
-add_executable(lsb_steganography src/main.cpp)
-target_link_libraries(lsb_steganography PRIVATE core_lib)
+add_executable(steg src/main.cpp)
+target_link_libraries(steg PRIVATE core_lib)
 
 # GoogleTest
 include(FetchContent)
@@ -36,6 +37,7 @@ add_executable(
     tests/images/imageLoaderTest.cpp
     tests/images/types/bmpImageTest.cpp
     tests/steganography/steganographerTest.cpp
+    tests/steganography/messengerTest.cpp
 )
 
 target_link_libraries(run_tests PRIVATE 
