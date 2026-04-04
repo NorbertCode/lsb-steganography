@@ -4,7 +4,7 @@
 class Messenger
 {
 public:
-    Messenger();
+    Messenger() { }
     Messenger(Steganographer &steganographer) : steganographer(steganographer) { }
 
     std::string readMessage(const Image &image, const size_t message_index = 0) const;

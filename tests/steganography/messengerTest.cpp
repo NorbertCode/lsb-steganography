@@ -6,8 +6,7 @@
 TEST(MessengerTest, Read_ValidFirstMessageFromOne_ReadsCorrectly)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp_hidden_message);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     std::string output = messenger.readMessage(*image);
 
@@ -17,8 +16,7 @@ TEST(MessengerTest, Read_ValidFirstMessageFromOne_ReadsCorrectly)
 TEST(MessengerTest, Read_ValidFirstMessageFromMultiple_ReadsCorrectly)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp_2_hidden_messages);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     std::string output = messenger.readMessage(*image);
 
@@ -28,8 +26,7 @@ TEST(MessengerTest, Read_ValidFirstMessageFromMultiple_ReadsCorrectly)
 TEST(MessengerTest, Read_InvalidFirstMessage_ThrowsError)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     EXPECT_THROW(messenger.readMessage(*image), NonexistentMessage);
 }
@@ -37,8 +34,7 @@ TEST(MessengerTest, Read_InvalidFirstMessage_ThrowsError)
 TEST(MessengerTest, Read_ValidSecondMessage_ReadsCorrectly)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp_2_hidden_messages);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     std::string output = messenger.readMessage(*image, 1);
 
@@ -48,8 +44,7 @@ TEST(MessengerTest, Read_ValidSecondMessage_ReadsCorrectly)
 TEST(MessengerTest, Read_InvalidSecondMessage_ThrowsError)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp_hidden_message);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     EXPECT_THROW(messenger.readMessage(*image, 1), NonexistentMessage);
 }
@@ -57,8 +52,7 @@ TEST(MessengerTest, Read_InvalidSecondMessage_ThrowsError)
 TEST(MessengerTest, ReadAll_ExistingMessages_ReadsCorrectly)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp_2_hidden_messages);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
     std::vector<std::string> expected = { "ABC", "DE" };
 
     std::vector<std::string> output = messenger.readAllMessages(*image);
@@ -69,8 +63,7 @@ TEST(MessengerTest, ReadAll_ExistingMessages_ReadsCorrectly)
 TEST(MessengerTest, ReadAll_NoMessages_ReturnsEmpty)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
     std::vector<std::string> expected = { };
 
     std::vector<std::string> output = messenger.readAllMessages(*image);
@@ -81,8 +74,7 @@ TEST(MessengerTest, ReadAll_NoMessages_ReturnsEmpty)
 TEST(MessengerTest, Write_ValidMessage_WritesCorrectly)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     messenger.writeMessage(*image, "HELLO");
 
@@ -92,8 +84,7 @@ TEST(MessengerTest, Write_ValidMessage_WritesCorrectly)
 TEST(MessengerTest, Write_ValidMessageExactLength_WritesCorrectly)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     // "ABCDEFGHIJ" - 10 chars, a 7x7 bmp can fit a message of at most 10 chars
     EXPECT_NO_THROW(messenger.writeMessage(*image, "ABCDEFGHIJ"));
@@ -102,8 +93,7 @@ TEST(MessengerTest, Write_ValidMessageExactLength_WritesCorrectly)
 TEST(MessengerTest, Write_NextValidMessage_WritesCorrectly)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     messenger.writeMessage(*image, "ABC");
     messenger.writeMessage(*image, "DE");
@@ -114,8 +104,7 @@ TEST(MessengerTest, Write_NextValidMessage_WritesCorrectly)
 TEST(MessengerTest, Write_NoSpaceForHeader_ThrowsError)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_1x1_3channel_bmp);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     EXPECT_THROW(messenger.writeMessage(*image, ""), MessageWontFit);
 }
@@ -123,8 +112,7 @@ TEST(MessengerTest, Write_NoSpaceForHeader_ThrowsError)
 TEST(MessengerTest, Write_MessageWontFit_ThrowsError)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     // "ABCDEFGHIJK" - 11 chars, a 7x7 bmp can fit a message of at most 10 chars
     EXPECT_THROW(messenger.writeMessage(*image, "ABCDEFGHIJK"), MessageWontFit);
@@ -133,8 +121,7 @@ TEST(MessengerTest, Write_MessageWontFit_ThrowsError)
 TEST(MessengerTest, Write_NextMessageWontFit_ThrowsError)
 {
     std::unique_ptr<Image> image = std::make_unique<BMPImage>(valid_7x7_3channel_bmp);
-    Steganographer steganographer;
-    Messenger messenger(steganographer);
+    Messenger messenger;
 
     messenger.writeMessage(*image, "ABCDEF");
     EXPECT_THROW(messenger.writeMessage(*image, "GHIJK"), MessageWontFit);
