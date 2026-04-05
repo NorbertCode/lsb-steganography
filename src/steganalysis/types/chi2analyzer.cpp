@@ -2,7 +2,7 @@
 #include <array>
 #include <cmath>
 
-AnalysisResult Chi2Analyzer::analyse(const Image &image) const
+AnalysisResult Chi2Analyzer::analyze(const Image &image) const
 {
     AnalysisResult result;
     result.method_name = SteganalysisMethod::CHI2;
@@ -20,7 +20,7 @@ float Chi2Analyzer::chi2(const Image &image, const size_t channel_index) const
     for (size_t i = channel_index; i < image.getPixelDataSize(); i += image.getChannels())
         histogram[image.getPixelData(i)] += 1;
 
-    float chi2 = 0;
+    float chi2 = 0.0f;
 
     for (unsigned int k = 0; k < 128; k++)
     {
@@ -31,7 +31,7 @@ float Chi2Analyzer::chi2(const Image &image, const size_t channel_index) const
         if (total == 0)
             continue;
 
-        float expected = total / 2;
+        float expected = total / 2.0f;
 
         chi2 += pow(a - expected, 2) / expected;
         chi2 += pow(b - expected, 2) / expected;

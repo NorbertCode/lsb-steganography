@@ -19,5 +19,5 @@ class Steganalyzer
 public:
     virtual ~Steganalyzer() = default;
 
-    virtual AnalysisResult analyse(const Image &image) const = 0;
+    virtual AnalysisResult analyze(const Image &image) const = 0;
 };

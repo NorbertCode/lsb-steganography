@@ -139,7 +139,7 @@ void parseArguments(int argc, char** argv)
     {
         std::unique_ptr<Steganalyzer> analyzer = std::make_unique<Chi2Analyzer>();
 
-        auto result = analyzer->analyse(*image);
+        auto result = analyzer->analyze(*image);
 
         for (auto metric : result.metrics)
             std::cout << metric.first << ": " << metric.second << std::endl;
