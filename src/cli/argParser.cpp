@@ -1,5 +1,6 @@
 #include "argParser.h"
 #include <cxxopts.hpp>
+#include "../steganalysis/types/chi2analyzer.h"
 #include "../steganography/messenger.h"
 #include "../images/imageLoader.h"
 
@@ -9,7 +10,7 @@ void parseArguments(int argc, char** argv)
 
     options.add_options()
         ("h,help", "Show help")
-        ("command", "The command to execute: read | readall | write ", cxxopts::value<std::string>())
+        ("command", "The command to execute: read | readall | write | analyze", cxxopts::value<std::string>())
         ("input", "Path of the target image", cxxopts::value<std::string>())
         ("o,output", "Path of the output image. Only valid when using write", cxxopts::value<std::string>())
         ("m,message", "Content of the message. Only valid when using write", cxxopts::value<std::string>())
@@ -40,7 +41,7 @@ void parseArguments(int argc, char** argv)
     std::string command;
     if (!result.count("command"))
     {
-        std::cerr << "Please specify command: read | readall | write" << std::endl;
+        std::cerr << "Please specify command: read | readall | write | analyze" << std::endl;
         std::cout << options.help() << std::endl;
         return;
     }
@@ -133,6 +134,15 @@ void parseArguments(int argc, char** argv)
         }
 
         imageLoader.saveImage(*image, output_path);
+    }
+    else if (command == "analyze")
+    {
+        std::unique_ptr<Steganalyzer> analyzer = std::make_unique<Chi2Analyzer>();
+
+        auto result = analyzer->analyse(*image);
+
+        for (auto metric : result.metrics)
+            std::cout << metric.first << ": " << metric.second << std::endl;
     }
     else
     {
