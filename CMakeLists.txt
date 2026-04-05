@@ -11,6 +11,8 @@ add_library(
     src/images/imageLoader.cpp
     src/steganography/steganographer.cpp 
     src/steganography/messenger.cpp
+    src/steganalysis/steganalyzer.h
+    src/steganalysis/types/chi2analyzer.cpp
 )
 target_include_directories(core_lib PUBLIC src)
 
