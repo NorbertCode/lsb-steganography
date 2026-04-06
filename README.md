@@ -18,9 +18,10 @@ A command line utility which allows reading, writing and analysis of hidden mess
 
 ## Overview
 
-<img align="right" width="50%" height="auto" src="https://github.com/user-attachments/assets/d912354f-c649-4b72-b92b-befe58bb5bab">
 
 The features this program offers include:
+
+<img align="right" width="50%" height="auto" src="docs/assets/usage.gif">
 
 - Programmer interface for reading and writing data ([primitive types and bytes](#bytes)) from images.
 - User interface for reading and writing messages (uses a [structured protocol](#messages)) from images.
@@ -40,7 +41,7 @@ The compiled binary will be in `build/` called `steg`.
 
 ### Execution
 
-<img align="right" width="35%" height="auto" src="https://github.com/user-attachments/assets/c465beba-0a7c-4de7-824b-3c6ac5327df0">
+<img align="right" width="35%" height="auto" src="docs/assets/help.png">
 
 This program uses a non-interactive CLI. To execute it you must run the binary like so:
 
