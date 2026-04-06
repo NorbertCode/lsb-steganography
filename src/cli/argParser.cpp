@@ -1,6 +1,7 @@
 #include "argParser.h"
 #include <cxxopts.hpp>
 #include "../steganalysis/types/chi2analyzer.h"
+#include "../steganalysis/types/rsAnalyzer.h"
 #include "../steganography/messenger.h"
 #include "../images/imageLoader.h"
 
@@ -14,7 +15,11 @@ void parseArguments(int argc, char** argv)
         ("input", "Path of the target image", cxxopts::value<std::string>())
         ("o,output", "Path of the output image. Only valid when using write", cxxopts::value<std::string>())
         ("m,message", "Content of the message. Only valid when using write", cxxopts::value<std::string>())
-        ("i,index", "Index of the message you want to read. Only valid when using read", cxxopts::value<size_t>());
+        ("i,index", "Index of the message you want to read. Only valid when using read", cxxopts::value<size_t>())
+        ("chi2", "Analysis method. Only valid when using analyze")
+        ("rs", "Analysis method. Only valid when using analyze")
+        ("rs-group-size", "Integer parameter for analysis using the RS method. To use you must also specify mask", cxxopts::value<size_t>())
+        ("rs-mask", "List of integers divided by comas, parameter for analysis using the RS method. To use you must also specify group size", cxxopts::value<std::vector<int>>());
 
     options.positional_help("<command> <input file>");
     options.parse_positional({ "command", "input" });
@@ -56,20 +61,6 @@ void parseArguments(int argc, char** argv)
     }
     input_path = result["input"].as<std::string>();
 
-    std::string output_path;
-    if (!result.count("output"))
-        output_path = "m_" + input_path;
-    else
-        output_path = result["output"].as<std::string>();
-
-    std::string message = "";
-    if (result.count("message"))
-        message = result["message"].as<std::string>();
-
-    size_t message_index = 0;
-    if (result.count("index"))
-        message_index = result["index"].as<size_t>();
-
     ImageLoader imageLoader;
     std::unique_ptr<Image> image;
     try
@@ -86,6 +77,10 @@ void parseArguments(int argc, char** argv)
 
     if (command == "read")
     {
+        size_t message_index = 0;
+        if (result.count("index"))
+            message_index = result["index"].as<size_t>();
+
         try
         {
             std::cout << messenger.readMessage(*image, message_index) << std::endl;
@@ -116,6 +111,16 @@ void parseArguments(int argc, char** argv)
     }
     else if (command == "write")
     {
+        std::string output_path;
+        if (!result.count("output"))
+            output_path = "m_" + input_path;
+        else
+            output_path = result["output"].as<std::string>();
+
+        std::string message = "";
+        if (result.count("message"))
+            message = result["message"].as<std::string>();
+
         if (message == "")
         {
             std::cerr << "When writing, please specify message content" << std::endl;
@@ -137,7 +142,17 @@ void parseArguments(int argc, char** argv)
     }
     else if (command == "analyze")
     {
-        std::unique_ptr<Steganalyzer> analyzer = std::make_unique<Chi2Analyzer>();
+        std::unique_ptr<Steganalyzer> analyzer;
+        
+        if (result.count("rs"))
+        {
+            if (result.count("rs-group-size") && result.count("rs-mask"))
+                analyzer = std::make_unique<RSAnalyzer>(result["rs-group-size"].as<size_t>(), result["rs-mask"].as<std::vector<int>>());
+            else
+                analyzer = std::make_unique<RSAnalyzer>();
+        }
+        else
+            analyzer = std::make_unique<Chi2Analyzer>();
 
         auto result = analyzer->analyze(*image);
 

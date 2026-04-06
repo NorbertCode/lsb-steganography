@@ -6,6 +6,7 @@
 enum class SteganalysisMethod
 {
     CHI2,
+    RS,
 };
 
 struct AnalysisResult
