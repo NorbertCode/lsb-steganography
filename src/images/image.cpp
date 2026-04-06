@@ -1,16 +1,16 @@
 #include "image.h"
 
-unsigned int Image::getWidth() const
+int Image::getWidth() const
 {
     return width;
 }
 
-unsigned int Image::getHeight() const
+int Image::getHeight() const
 {
     return height;
 }
 
-unsigned int Image::getChannels() const
+int Image::getChannels() const
 {
     return channels;
 }

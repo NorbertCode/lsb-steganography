@@ -14,9 +14,9 @@ public:
 
     virtual ~Image() = default;
 
-    unsigned int getWidth() const;
-    unsigned int getHeight() const;
-    unsigned int getChannels() const;
+    int getWidth() const;
+    int getHeight() const;
+    int getChannels() const;
     size_t getSize() const;
     Type getImageType() const;
     std::vector<uint8_t> getFileData() const;
@@ -26,8 +26,8 @@ public:
     virtual void setPixelData(const size_t index, const uint8_t data) = 0;
 
 protected:
-    unsigned int width, height;
-    unsigned int channels;
+    int width, height;
+    int channels;
     Type image_type;
     std::vector<uint8_t> file_data;
 };
