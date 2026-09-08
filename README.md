@@ -168,11 +168,12 @@ The `Messenger` class is responsible for writing and reading more complex data t
 It applies the following protocol to allow for easy access to data inside the image:
 
 ```
-[number of messages][message 0 length][message 0 content][message 1 length][... and so on]
+[magic number][number of messages][message 0 length][message 0 content][message 1 length][... and so on]
 ```
 
 Where:
 
+- `magic number` is "MSG", a 3-char string to mark the file as having messages
 - `number of messages` is `uint32`
 - `message length` is `uint32`
 - `message content` is a series of `chars`
