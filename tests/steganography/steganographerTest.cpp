@@ -93,7 +93,6 @@ TEST_F(SteganographerTest, Write_ByteValid_WritesCorrectly)
     {
         uint8_t bit = image->getPixelData(i) & 0x1;
         uint8_t expected = (input[0] >> (7 - i)) & 0x1;
-        printf("%d: %d %d\n", i, bit, expected);
         EXPECT_EQ(bit, expected);
     }
 }
@@ -170,7 +169,6 @@ TEST_F(SteganographerTest, WriteTemplate_Char_WritesCorrectly)
     {
         uint8_t bit = image->getPixelData(i) & 0x1;
         uint8_t expected = ('A' >> (7 - i)) & 0x1;
-        printf("%d: %d %d\n", i, bit, expected);
         EXPECT_EQ(bit, expected);
     }
 }
