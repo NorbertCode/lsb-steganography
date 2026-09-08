@@ -15,6 +15,7 @@ A command line utility which allows reading, writing and analysis of hidden mess
     3. [Primitives](#primitives)
     4. [Messages](#messages)
 5. [Steganalysis](#steganalysis)
+6. [Tests](#tests)
 
 ## Overview
 
@@ -185,3 +186,9 @@ The program currently supports two types of steganalysis:
 - Chi-squared - Scans pairs of values on the histogram. Outputs a float representing the chi-squared statistic, which is the sum of squared deviations within pairs. The lower the number, the higher the chance of steganography, as embedding data equalizes these values.
 
 - RS - Measures how the image reacts to bit flips. Returns the estimated embedding rate, which is essentially how noisy an image is. The higher the embedding rate, the higher the chance of steganography.
+
+## Tests
+
+Tests were performed using `GoogleTest`. They were meant to verify correct behavior at every step of the steganography process - loading images, manipulation of images, writing and reading trivial variables types from images, and writing and reading complex messages from images.
+
+This was possible due to total decoupling of image processing logic from loading the files. The moment a file is loaded the program extracts its data and operates on it, handling it not as a file, but as a `std::vector<uint8_t>`.
