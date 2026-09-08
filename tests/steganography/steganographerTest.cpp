@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "../sharedTestData.h"
-#include "../../src/steganography/steganographer.h"
-#include "../../src/images/types/bmpImage.h"
+#include "sharedTestData.h"
+#include "steganography/steganographer.h"
+#include "images/types/bmpImage.h"
 
 class SteganographerTest : public testing::Test
 {

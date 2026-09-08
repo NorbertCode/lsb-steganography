@@ -1,5 +1,5 @@
 #pragma once
-#include "../steganalyzer.h"
+#include "steganalysis/steganalyzer.h"
 
 class RSAnalyzer : public Steganalyzer
 {

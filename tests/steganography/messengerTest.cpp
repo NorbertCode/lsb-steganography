@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "../../src/steganography/messenger.h"
-#include "../../src/images/types/bmpImage.h"
-#include "../sharedTestData.h"
+#include "steganography/messenger.h"
+#include "images/types/bmpImage.h"
+#include "sharedTestData.h"
 
 TEST(MessengerTest, Read_ValidFirstMessageFromOne_ReadsCorrectly)
 {

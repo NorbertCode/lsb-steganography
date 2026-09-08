@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../../sharedTestData.h"
-#include "../../../src/images/types/bmpImage.h"
+#include "sharedTestData.h"
+#include "images/types/bmpImage.h"
 
 TEST(BMPImageTest, GetParameters_1x1_ReturnsCorrectValues)
 {

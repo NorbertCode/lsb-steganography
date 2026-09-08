@@ -1,9 +1,9 @@
 #include "argParser.h"
 #include <cxxopts.hpp>
-#include "../steganalysis/types/chi2analyzer.h"
-#include "../steganalysis/types/rsAnalyzer.h"
-#include "../steganography/messenger.h"
-#include "../images/imageLoader.h"
+#include "steganalysis/types/chi2analyzer.h"
+#include "steganalysis/types/rsAnalyzer.h"
+#include "steganography/messenger.h"
+#include "images/imageLoader.h"
 
 void parseArguments(int argc, char** argv)
 {

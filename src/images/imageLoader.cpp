@@ -1,7 +1,6 @@
 #include "imageLoader.h"
 #include "types/bmpImage.h"
 #include <fstream>
-#include <algorithm>
 
 std::unique_ptr<Image> ImageLoader::openImage(const std::string &file_path) const
 {

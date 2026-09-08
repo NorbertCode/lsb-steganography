@@ -1,6 +1,5 @@
 #include "bmpImage.h"
 #include <cstring>
-#include <exception>
 
 #define COLOR_DEPTH_OFFSET  28
 #define COLOR_DEPTH_SIZE    2

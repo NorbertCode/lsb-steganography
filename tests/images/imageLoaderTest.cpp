@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../../src/images/imageLoader.h"
-#include "../sharedTestData.h"
+#include "images/imageLoader.h"
+#include "sharedTestData.h"
 
 class TestImageLoader : public ImageLoader
 {

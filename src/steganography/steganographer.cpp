@@ -1,5 +1,4 @@
 #include "steganographer.h"
-#include <iostream>
 #include <vector>
 
 std::vector<uint8_t> Steganographer::read(const Image &image, const size_t start_index, const size_t length_bytes) const

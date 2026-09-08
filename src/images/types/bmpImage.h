@@ -1,5 +1,5 @@
 #pragma once
-#include "../image.h"
+#include "images/image.h"
 
 class BMPImage : public Image
 {
